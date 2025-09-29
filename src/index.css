@@ -100,3 +100,7 @@ button{font:inherit}
 
   .cx-content{min-height:calc(100vh - 88px)}
 }
+.cx-section-title {
+  margin-top: 2rem;   
+  margin-bottom: 1rem; 
+}

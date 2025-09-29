@@ -13,3 +13,19 @@ export async function fetchCategorias() {
   if (!res.ok) throw new Error('Error al cargar categorías');
   return res.json();
 }
+
+/*lista de países para el dropdown */
+export async function fetchPaises() {
+  const res = await fetch(`${BASE}/paises`);
+  if (!res.ok) throw new Error('Error al cargar países');
+  return res.json();
+}
+
+/*datos completos de la Home por país */
+export async function fetchHome(paisId) {
+  const url = new URL(`${BASE}/home`);
+  url.searchParams.set('paisId', String(paisId));
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Error al cargar datos de inicio');
+  return res.json();
+}
