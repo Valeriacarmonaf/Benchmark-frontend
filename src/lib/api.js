@@ -29,3 +29,37 @@ export async function fetchHome(paisId) {
   if (!res.ok) throw new Error('Error al cargar datos de inicio');
   return res.json();
 }
+
+export async function fetchProveedores(q = '') {
+  const url = new URL(`${BASE}/proveedores`);
+  if (q) url.searchParams.set('q', q);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Error al cargar proveedores');
+  return res.json();
+}
+
+export async function fetchProductos({ q = '', categoryId = '', limit = 24, offset = 0 } = {}) {
+  const url = new URL(`${BASE}/products`);
+  if (q) url.searchParams.set('q', q);
+  if (categoryId) url.searchParams.set('categoryId', categoryId);
+  url.searchParams.set('limit', limit);
+  url.searchParams.set('offset', offset);
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Error al cargar productos');
+  return res.json(); 
+}
+
+export async function fetchOperadoraById(id) {
+  const res = await fetch(`${BASE}/operadoras/${id}`);
+  if (!res.ok) throw new Error('Error al cargar operadora');
+  return res.json();
+}
+
+export async function fetchOperadoraVas(id, { categoryId = '' } = {}) {
+  const url = new URL(`${BASE}/operadoras/${id}/vas`);
+  if (categoryId) url.searchParams.set('categoryId', categoryId);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Error al cargar VAS de la operadora');
+  return res.json();
+}

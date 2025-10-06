@@ -1,3 +1,4 @@
+// Frontend/src/pages/Home.jsx
 import { useEffect, useMemo, useState } from 'react';
 import { fetchPaises, fetchHome } from '../lib/api';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
@@ -5,7 +6,7 @@ import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recha
 const GREEN = '#A6D33D';
 const PALETTE = ['#A6D33D', '#89C13C', '#6FB03A', '#559E38', '#3C8C36', '#227A34'];
 
-export default function Home() {
+export default function Home({ onOpenOperadora }) {  // 👈 recibe el callback
   const [paises, setPaises] = useState([]);
   const [paisId, setPaisId] = useState('');
   const [data, setData] = useState(null);
@@ -99,28 +100,35 @@ export default function Home() {
             {/* KPIs card */}
             <div style={cardStyle}>
               <h3 style={cardTitle}>Datos demográficos</h3>
-             <div
-               style={{
-                 minHeight: 220,
-                 display: 'grid',
-                 gridTemplateRows: 'repeat(3, 1fr)',
-                 rowGap: 18,
-                 paddingTop: 12
-               }}
-             >
-               <Row label="Total habitantes" value={formatNumber(data.pais?.total_habitantes)} />
-               <Row label="Total operadoras" value={data.kpis?.operadoras ?? 0} />
+              <div
+                style={{
+                  minHeight: 220,
+                  display: 'grid',
+                  gridTemplateRows: 'repeat(3, 1fr)',
+                  rowGap: 18,
+                  paddingTop: 12
+                }}
+              >
+                <Row label="Total habitantes" value={formatNumber(data.pais?.total_habitantes)} />
+                <Row label="Total operadoras" value={data.kpis?.operadoras ?? 0} />
                 <Row label="Nº Productos VAS" value={data.kpis?.productos ?? 0} />
               </div>
             </div>
           </div>
 
-          {/* Galería */}
+          {/* Galería de operadoras asociadas (clickeable) */}
           <div style={{ marginTop: 8 }}>
             <h3 className="cx-section-title">Operadoras asociadas</h3>
             <div style={gridGallery}>
               {data.operadoras?.length ? data.operadoras.map(op => (
-                <div key={op.id_empresa} style={tile}>
+                <div
+                  key={op.id_empresa}
+                  style={{ ...tile, cursor: 'pointer' }}  // cursor
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => onOpenOperadora?.(op.id_empresa)}  // 👈 abre detalle
+                  onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onOpenOperadora?.(op.id_empresa)}
+                >
                   <span style={{ textAlign:'center', fontWeight:600 }}>{op.nombre_empresa}</span>
                 </div>
               )) : <p>No hay operadoras registradas.</p>}
@@ -137,20 +145,20 @@ function Row({ label, value }) {
   return (
     <div
       style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: 16,
-      padding: '10px 0',   // más aire vertical
-      lineHeight: 1.35     // mejora la lectura
-    }}
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 16,
+        padding: '10px 0',
+        lineHeight: 1.35
+      }}
     >
-
       <span style={{ color:'#555' }}>{label}</span>
       <span style={{ fontWeight:700 }}>{value}</span>
     </div>
   );
 }
+
 const formatNumber = (n) => n != null ? n.toLocaleString() : '—';
 
 const cardStyle = {
