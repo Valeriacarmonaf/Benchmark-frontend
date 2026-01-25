@@ -20,12 +20,10 @@ export default function Login({ onGoRegister, onGoForgot }) {
     }
 
     setLoading(true);
-    const { data, error: signInError } = await supabase.auth.signInWithPassword({
+    const { error: signInError } = await supabase.auth.signInWithPassword({
       email: em,
       password,
     });
-
-    console.log('Login.signInWithPassword ->', { data, signInError });
 
     if (signInError) {
       const msg = (signInError.message || '').toLowerCase();
@@ -37,15 +35,6 @@ export default function Login({ onGoRegister, onGoForgot }) {
       setLoading(false);
       return;
     }
-
-    // Si recibimos sesión, forzamos recarga para que AuthProvider la detecte correctamente
-    if (data?.session) {
-      console.log('Login: sesión creada, recargando para aplicar sesión');
-      // redirige a la raíz; reload garantiza que AuthProvider haga el bootstrap
-      window.location.href = '/';
-      return; // no continuar
-    }
-
     setLoading(false);
   }
 

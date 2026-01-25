@@ -91,6 +91,10 @@ export async function fetchStatsPenetracionVAS() {
 
 export async function fetchStatsParticipacionPaises() {
   const r = await fetch(`${BASE}/stats/participacion-paises`);
-  if (!r.ok) throw new Error('Error stats participación países');
+  if (!r.ok) {
+    let body = null;
+    try { body = await r.text(); } catch (e) { body = String(e); }
+    throw new Error(`Error stats participación países (status ${r.status}): ${body}`);
+  }
   return r.json();
 }

@@ -18,7 +18,7 @@ import { useAuth } from './hooks/useAuth_new';
 import './index.css';
 
 export default function App() {
-  const { session, loading, isAdmin, isActive, signOut } = useAuth();
+  const { session, loading, isAdmin, isActive, profile, signOut } = useAuth();
 
   // Estado de navegación interna (tu app actual)
   const [active, setActive] = useState('home');
@@ -50,11 +50,14 @@ export default function App() {
 
   // Si hay sesión pero el usuario está inactivo, lo sacas
   useEffect(() => {
-    if (!loading && session && isActive === false) {
+    // Solo hacemos signOut automático si ya cargamos el perfil y explícitamente
+    // el campo is_active es false. Si profile === null puede significar que
+    // no existe fila de perfil aún, y no queremos expulsar al usuario por eso.
+    if (!loading && session && profile !== null && isActive === false) {
       // seguridad extra: si lo bloquean en DB, se lo saca
       signOut();
     }
-  }, [loading, session, isActive, signOut]);
+  }, [loading, session, profile, isActive, signOut]);
 
   // Admin guard (UI)
   useEffect(() => {

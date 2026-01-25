@@ -13,7 +13,10 @@ export default function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // authLoading: only for initial auth/session bootstrap (fast)
+  const [authLoading, setAuthLoading] = useState(true);
+  // profileLoading: true while fetching profile in background
+  const [profileLoading, setProfileLoading] = useState(false);
 
   async function loadProfileSafe(userId) {
     try {
@@ -37,21 +40,23 @@ export default function AuthProvider({ children }) {
     }
   }
 
-  // Aplica sesión rápido (sin bloquear UI por perfil)
-  async function applySessionFast(newSession) {
+  // Apply auth session quickly (do not wait for profile)
+  async function applyAuthSession(newSession) {
     setSession(newSession);
     setUser(newSession?.user ?? null);
+    // auth bootstrap finished
+    setAuthLoading(false);
 
-    // No bloquea el render
-    setLoading(false);
-
-    // Perfil se carga en background
+    // start loading profile in background
     const uid = newSession?.user?.id;
     if (uid) {
+      setProfileLoading(true);
       const p = await loadProfileSafe(uid);
       setProfile(p);
+      setProfileLoading(false);
     } else {
       setProfile(null);
+      setProfileLoading(false);
     }
   }
 
@@ -61,28 +66,26 @@ export default function AuthProvider({ children }) {
     (async () => {
       try {
         const { data, error } = await supabase.auth.getSession();
-        console.log('AuthProvider: getSession ->', { data, error });
         if (error) console.error('getSession error:', error);
         if (!mounted) return;
-        await applySessionFast(data?.session ?? null);
+        await applyAuthSession(data?.session ?? null);
       } catch (e) {
         console.error('Bootstrap auth error:', e);
-        // Pase lo que pase, no bloquees la app
-        if (mounted) setLoading(false);
+        // ensure authLoading is cleared so app can render
+        if (mounted) setAuthLoading(false);
       }
     })();
 
-    const { data: sub } = supabase.auth.onAuthStateChange(async (event, newSession) => {
-      console.log('AuthProvider: onAuthStateChange', { event, newSession });
+    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
       if (!mounted) return;
-      await applySessionFast(newSession);
+      // update auth session and reload profile in background
+      await applyAuthSession(newSession);
     });
 
     return () => {
       mounted = false;
       try {
         sub?.subscription?.unsubscribe?.();
-        console.log('AuthProvider: unsubscribed onAuthStateChange');
       } catch (e) {
         console.warn('AuthProvider: error during unsubscribe', e);
       }
@@ -93,12 +96,14 @@ export default function AuthProvider({ children }) {
     session,
     user,
     profile,
-    loading,
+    // expose auth loading as `loading` for backwards compatibility
+    loading: authLoading,
+    profileLoading,
     isAdmin: profile?.role === 'admin' && profile?.is_active === true,
     isActive: profile?.is_active === true,
     email: profile?.email ?? user?.email ?? null,
     signOut: () => supabase.auth.signOut(),
-  }), [session, user, profile, loading]);
+  }), [session, user, profile, authLoading, profileLoading]);
 
   return (
     <AuthContext.Provider value={value}>
