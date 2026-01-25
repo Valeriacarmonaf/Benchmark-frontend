@@ -1,0 +1,43 @@
+.kpiCard {
+  padding: 12px 14px;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.left {
+  min-width: 0;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(0,0,0,0.70);
+}
+
+.value {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  color: rgba(0,0,0,0.90);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+.sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(0,0,0,0.70);
+}
+
+.icon {
+  font-size: 22px;
+  line-height: 1;
+}

@@ -1,0 +1,7 @@
+.card {
+  background: #eef7d8; /* verde suave tipo referencia */
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+}

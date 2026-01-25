@@ -2,12 +2,14 @@ import { fetchOperadoras } from '../lib/api';
 import { useSearchList } from '../hooks/useSearchList';
 import SearchToolbar from '../components/SearchToolbar';
 import CardGrid from '../components/CardGrid';
+import { useCallback } from 'react';
+
 
 export default function Operadoras({ onOpen }) {  
-  const fetcher = async ({ q }) => {
+  const fetcher = useCallback(async ({ q }) => {
     const list = await fetchOperadoras(q);
     return { total: list.length, items: list };
-  };
+  }, []);
 
   const { q, setQ, items, total, pending, limit, offset, setOffset } =
     useSearchList(fetcher, { pageSize: 24 });

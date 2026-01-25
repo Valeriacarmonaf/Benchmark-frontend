@@ -14,6 +14,13 @@ export async function fetchCategorias() {
   return res.json();
 }
 
+export async function fetchStatsTopOperadorasProductos() {
+  const r = await fetch(`${BASE}/stats/top-operadoras-productos`);
+  if (!r.ok) throw new Error('Error cargando top operadoras-productos');
+  return r.json();
+}
+
+
 /*lista de países para el dropdown */
 export async function fetchPaises() {
   const res = await fetch(`${BASE}/paises`);
@@ -62,4 +69,28 @@ export async function fetchOperadoraVas(id, { categoryId = '' } = {}) {
   const res = await fetch(url);
   if (!res.ok) throw new Error('Error al cargar VAS de la operadora');
   return res.json();
+}
+
+export async function fetchStatsMultinacional() {
+  const r = await fetch(`${BASE}/stats/multinacional`);
+  if (!r.ok) throw new Error('Error stats multinacional');
+  return r.json();
+}
+
+export async function fetchStatsTopCategorias() {
+  const r = await fetch(`${BASE}/stats/top-categorias`);
+  if (!r.ok) throw new Error('Error stats top categorías');
+  return r.json();
+}
+
+export async function fetchStatsPenetracionVAS() {
+  const r = await fetch(`${BASE}/stats/penetracion-vas`);
+  if (!r.ok) throw new Error('Error stats penetración VAS');
+  return r.json();
+}
+
+export async function fetchStatsParticipacionPaises() {
+  const r = await fetch(`${BASE}/stats/participacion-paises`);
+  if (!r.ok) throw new Error('Error stats participación países');
+  return r.json();
 }

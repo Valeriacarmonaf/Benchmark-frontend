@@ -6,24 +6,40 @@ import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recha
 const GREEN = '#A6D33D';
 const PALETTE = ['#A6D33D', '#89C13C', '#6FB03A', '#559E38', '#3C8C36', '#227A34'];
 
-export default function Home({ onOpenOperadora }) {  // 👈 recibe el callback
+export default function Home({ onOpenOperadora, selectedPaisId }) {
   const [paises, setPaises] = useState([]);
   const [paisId, setPaisId] = useState('');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // cargar países al montar
+  //Cargar países al montar
   useEffect(() => {
     (async () => {
       try {
         const ps = await fetchPaises();
         setPaises(ps);
-        if (ps.length) setPaisId(ps[0].id_pais); // selecciona el 1º por defecto
-      } catch (e) { console.error(e); }
+        // Si ya tenemos un país seleccionado, lo mantenemos. Si no, tomamos el primero.
+        if (ps.length) {
+          if (selectedPaisId) {
+            setPaisId(String(selectedPaisId));     // usa directamente el país que viene del detalle
+          } else {
+            setPaisId(ps[0].id_pais);              // si no viene nada, usa el primero por defecto
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
     })();
-  }, []);
+  }, [selectedPaisId]); //corrección copilot
 
-  // cargar datos de home al cambiar pais
+  //Si App.jsx nos pasa un país seleccionado (por ejemplo al volver del detalle), aplicarlo
+  useEffect(() => {
+    if (selectedPaisId) {
+      setPaisId(String(selectedPaisId));
+    }
+  }, [selectedPaisId]);
+
+  // 🔹 Cargar datos de Home según país seleccionado
   useEffect(() => {
     if (!paisId) return;
     (async () => {
@@ -31,11 +47,15 @@ export default function Home({ onOpenOperadora }) {  // 👈 recibe el callback
       try {
         const res = await fetchHome(paisId);
         setData(res);
-      } catch (e) { console.error(e); }
-      finally { setLoading(false); }
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
     })();
   }, [paisId]);
 
+  // 🔹 Preparar datos para el gráfico
   const pieData = useMemo(() => {
     if (!data?.marketshare) return [];
     return data.marketshare.map((r) => ({
@@ -46,12 +66,12 @@ export default function Home({ onOpenOperadora }) {  // 👈 recibe el callback
 
   return (
     <div style={{ padding: 16 }}>
-      {/* Dropdown de países */}
-      <div style={{ display:'flex', gap:12, alignItems:'center', marginBottom:12 }}>
-        <label style={{ fontWeight:600 }}>País:</label>
+      {/* 🔹 Dropdown de países */}
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 12 }}>
+        <label style={{ fontWeight: 600 }}>País:</label>
         <select
           value={paisId}
-          onChange={(e)=> setPaisId(e.target.value)}
+          onChange={(e) => setPaisId(e.target.value)}
           style={{
             padding: '8px 12px',
             borderRadius: 999,
@@ -60,8 +80,10 @@ export default function Home({ onOpenOperadora }) {  // 👈 recibe el callback
           }}
           aria-label="Seleccionar país"
         >
-          {paises.map(p => (
-            <option key={p.id_pais} value={p.id_pais}>{p.nombre_pais}</option>
+          {paises.map((p) => (
+            <option key={p.id_pais} value={p.id_pais}>
+              {p.nombre_pais}
+            </option>
           ))}
         </select>
       </div>
@@ -70,8 +92,15 @@ export default function Home({ onOpenOperadora }) {  // 👈 recibe el callback
 
       {!loading && data && (
         <>
-          {/* Row 2: Pie + KPIs */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:16 }}>
+          {/* 🔹 Row 2: Pie + KPIs */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 16,
+              marginBottom: 16
+            }}
+          >
             {/* PieChart card */}
             <div style={cardStyle}>
               <h3 style={cardTitle}>Marketshare</h3>
@@ -116,22 +145,31 @@ export default function Home({ onOpenOperadora }) {  // 👈 recibe el callback
             </div>
           </div>
 
-          {/* Galería de operadoras asociadas (clickeable) */}
+          {/* 🔹 Galería de operadoras asociadas */}
           <div style={{ marginTop: 8 }}>
             <h3 className="cx-section-title">Operadoras asociadas</h3>
             <div style={gridGallery}>
-              {data.operadoras?.length ? data.operadoras.map(op => (
-                <div
-                  key={op.id_empresa}
-                  style={{ ...tile, cursor: 'pointer' }}  // cursor
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => onOpenOperadora?.(op.id_empresa)}  // 👈 abre detalle
-                  onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onOpenOperadora?.(op.id_empresa)}
-                >
-                  <span style={{ textAlign:'center', fontWeight:600 }}>{op.nombre_empresa}</span>
-                </div>
-              )) : <p>No hay operadoras registradas.</p>}
+              {data.operadoras?.length ? (
+                data.operadoras.map((op) => (
+                  <div
+                    key={op.id_empresa}
+                    style={{ ...tile, cursor: 'pointer' }}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => onOpenOperadora?.(op.id_empresa)}
+                    onKeyDown={(e) =>
+                      (e.key === 'Enter' || e.key === ' ') &&
+                      onOpenOperadora?.(op.id_empresa)
+                    }
+                  >
+                    <span style={{ textAlign: 'center', fontWeight: 600 }}>
+                      {op.nombre_empresa}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p>No hay operadoras registradas.</p>
+              )}
             </div>
           </div>
         </>
@@ -140,7 +178,7 @@ export default function Home({ onOpenOperadora }) {  // 👈 recibe el callback
   );
 }
 
-/* helpers visuales */
+/* 🔹 Helpers visuales */
 function Row({ label, value }) {
   return (
     <div
@@ -153,13 +191,13 @@ function Row({ label, value }) {
         lineHeight: 1.35
       }}
     >
-      <span style={{ color:'#555' }}>{label}</span>
-      <span style={{ fontWeight:700 }}>{value}</span>
+      <span style={{ color: '#555' }}>{label}</span>
+      <span style={{ fontWeight: 700 }}>{value}</span>
     </div>
   );
 }
 
-const formatNumber = (n) => n != null ? n.toLocaleString() : '—';
+const formatNumber = (n) => (n != null ? n.toLocaleString() : '—');
 
 const cardStyle = {
   background: '#F3F7EA',
@@ -167,6 +205,7 @@ const cardStyle = {
   boxShadow: '0 6px 20px rgba(0,0,0,.08)',
   padding: 14
 };
+
 const cardTitle = { margin: 0, marginBottom: 8 };
 
 const gridGallery = {
@@ -174,6 +213,7 @@ const gridGallery = {
   gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
   gap: 16
 };
+
 const tile = {
   background: '#CDE78A',
   borderRadius: 12,

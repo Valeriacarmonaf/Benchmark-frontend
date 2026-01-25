@@ -1,6 +1,6 @@
-export default function CardGrid({ items, renderItem, heightOffset = 220 }) {
+export default function CardGrid({ items, renderItem }) {
   return (
-    <div className="cx-grid" style={{ maxHeight: `calc(100vh - ${heightOffset}px)` }}>
+    <div className="cx-grid">
       {items.map(renderItem)}
     </div>
   );

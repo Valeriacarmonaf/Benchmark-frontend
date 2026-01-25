@@ -36,8 +36,7 @@ export default function OperadoraDetalle({ id, onBack }) {
 
   return (
     <div className="cx-content-placeholder">
-      <button className="cx-linkback" onClick={onBack}>← Regresar a lista de operadoras</button>
-
+      <button className="cx-linkback" onClick={() => onBack(op?.id_pais)}>← Regresar</button>
       {/* Header de la operadora */}
       <div className="op-header">
         <div className="op-logoBox">{op?.foto ? <img src={op.foto} alt={op.nombre_empresa} /> : <div className="op-logoPlaceholder" />}</div>
