@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { isAllowedDomain, normalizeEmail } from './_authUtils';
+import './Auth.css';
 
 export default function Login({ onGoRegister, onGoForgot }) {
   const [email, setEmail] = useState('');
@@ -39,45 +40,47 @@ export default function Login({ onGoRegister, onGoForgot }) {
   }
 
   return (
-    <div style={{ maxWidth: 420, margin: '40px auto', padding: 20 }}>
-      <h2>Iniciar sesión</h2>
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-logo">
+          <img src="/conectium_logo.png" alt="conectium" className="auth-logo-img" />
+        </div>
 
-      {error && <p style={{ color: 'crimson' }}>{error}</p>}
+        <div className="auth-title">Iniciar sesión</div>
 
-      <form onSubmit={handleLogin}>
-        <label>Correo</label>
-        <input
-          style={{ width: '100%', padding: 10, margin: '6px 0 12px' }}
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="tu@androvent.com"
-          autoComplete="email"
-          required
-        />
+        {error && <p className="auth-error">{error}</p>}
 
-        <label>Contraseña</label>
-        <input
-          style={{ width: '100%', padding: 10, margin: '6px 0 12px' }}
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
-          required
-        />
+        <form onSubmit={handleLogin}>
+          <label className="auth-label">Correo</label>
+          <input
+            className="auth-input"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="tu@androvent.com"
+            autoComplete="email"
+            required
+          />
 
-        <button type="submit" disabled={loading} style={{ width: '100%', padding: 10 }}>
-          {loading ? 'Entrando…' : 'Entrar'}
-        </button>
-      </form>
+          <label className="auth-label">Contraseña</label>
+          <input
+            className="auth-input"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+          />
 
-      <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between' }}>
-        <button onClick={onGoForgot} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
-          ¿Olvidaste tu contraseña?
-        </button>
-        <button onClick={onGoRegister} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
-          Crear cuenta
-        </button>
+          <button className="auth-button" type="submit" disabled={loading}>
+            {loading ? 'Entrando…' : 'Ingresar'}
+          </button>
+        </form>
+
+        <div className="auth-links">
+          <button className="auth-link" onClick={onGoForgot} type="button">¿Olvidaste tu contraseña?</button>
+          <button className="auth-link" onClick={onGoRegister} type="button">Crear cuenta</button>
+        </div>
       </div>
     </div>
   );

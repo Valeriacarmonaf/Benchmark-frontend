@@ -1,0 +1,129 @@
+/* Estilos para las pantallas de autenticación (login / register / forgot)
+   Basado en las imágenes proporcionadas: fondo degradado, tarjeta blanca centrada,
+   inputs tipo "pill" grises, botón verde oscuro y enlaces pequeños debajo. */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #dff2b6 0%, #b8e37a 50%, #9ad04a 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+.auth-card {
+  background: #fff;
+  width: 100%;
+  max-width: 420px;
+  padding: 36px 28px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(12, 20, 10, 0.12);
+  text-align: center;
+  position: relative;
+}
+
+.auth-logo {
+  margin: 0 auto 18px;
+  display: block;
+}
+
+.auth-logo-text {
+  font-weight: 700;
+  color: #2d6b24;
+  font-size: 26px;
+  letter-spacing: 0.6px;
+}
+
+.auth-logo img,
+.auth-logo-img {
+  display: block;
+  margin: 0 auto 14px;
+  height: 46px;
+  width: auto;
+}
+
+.auth-title {
+  font-size: 18px;
+  color: #2d3a2a;
+  margin: 6px 0 14px;
+  font-weight: 600;
+}
+
+.auth-note {
+  margin: 12px 0;
+  color: rgba(0,0,0,0.55);
+  font-size: 13px;
+}
+
+.auth-label {
+  display: block;
+  text-align: left;
+  color: #808080;
+  font-size: 13px;
+  margin: 6px 0 6px;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #f1f1f1;
+  outline: none;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.auth-input:focus {
+  box-shadow: 0 0 0 3px rgba(141, 196, 116, 0.18);
+}
+
+.auth-button {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 20px;
+  background: #3b5b16; /* verde oscuro */
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.06);
+}
+
+.auth-button[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.auth-links {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.auth-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #2b5b16;
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.auth-small-center {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.auth-error { color: #b22222; margin-bottom: 10px; }
+.auth-success { color: #2a8a2a; margin-bottom: 10px; }
+
+/* Small responsive tweaks */
+@media (max-width: 480px) {
+  .auth-card { padding: 22px; border-radius: 10px; }
+}

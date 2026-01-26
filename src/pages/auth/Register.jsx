@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { isAllowedDomain, normalizeEmail, getSiteUrl } from './_authUtils';
+import './Auth.css';
 
 export default function Register({ onGoLogin }) {
   const [email, setEmail] = useState('');
@@ -40,45 +41,49 @@ export default function Register({ onGoLogin }) {
   }
 
   return (
-    <div style={{ maxWidth: 420, margin: '40px auto', padding: 20 }}>
-      <h2>Crear cuenta</h2>
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-logo">
+          <img src="/conectium_logo.png" alt="conectium" className="auth-logo-img" />
+        </div>
 
-      {error && <p style={{ color: 'crimson' }}>{error}</p>}
-      {msg && <p style={{ color: 'green' }}>{msg}</p>}
+        <div className="auth-title">Crear cuenta</div>
 
-      <div style={{ margin: '16px 0', textAlign: 'center', opacity: 0.7 }}>o</div>
+        {error && <p className="auth-error">{error}</p>}
+        {msg && <p className="auth-success">{msg}</p>}
 
-      <form onSubmit={handleRegister}>
-        <label>Correo corporativo</label>
-        <input
-          style={{ width: '100%', padding: 10, margin: '6px 0 12px' }}
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="tu@androvent.com"
-          autoComplete="email"
-          required
-        />
+     
 
-        <label>Contraseña</label>
-        <input
-          style={{ width: '100%', padding: 10, margin: '6px 0 12px' }}
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="new-password"
-          required
-        />
+        <form onSubmit={handleRegister}>
+          <label className="auth-label">Correo corporativo</label>
+          <input
+            className="auth-input"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="tu@androvent.com"
+            autoComplete="email"
+            required
+          />
 
-        <button type="submit" disabled={loading} style={{ width: '100%', padding: 10 }}>
-          {loading ? 'Creando…' : 'Crear cuenta'}
-        </button>
-      </form>
+          <label className="auth-label">Contraseña</label>
+          <input
+            className="auth-input"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="new-password"
+            required
+          />
 
-      <div style={{ marginTop: 12 }}>
-        <button onClick={onGoLogin} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
-          Volver a iniciar sesión
-        </button>
+          <button className="auth-button" type="submit" disabled={loading}>
+            {loading ? 'Creando…' : 'Crear cuenta'}
+          </button>
+        </form>
+
+        <div className="auth-small-center">
+          <button className="auth-link" onClick={onGoLogin} type="button">Volver a iniciar sesión</button>
+        </div>
       </div>
     </div>
   );
