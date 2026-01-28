@@ -28,6 +28,42 @@ export async function fetchPaises() {
   return res.json();
 }
 
+// Países CRUD
+export async function createPais(payload) {
+  const res = await fetch(`${BASE}/paises`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error creando país (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+export async function updatePais(id, payload) {
+  const res = await fetch(`${BASE}/paises/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error actualizando país (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+export async function deletePais(id) {
+  const res = await fetch(`${BASE}/paises/${id}`, { method: 'DELETE' });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error eliminando país (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
 /*datos completos de la Home por país */
 export async function fetchHome(paisId) {
   const url = new URL(`${BASE}/home`);
