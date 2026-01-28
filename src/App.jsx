@@ -7,6 +7,7 @@ import Productos from './pages/Productos';
 import Operadoras from './pages/Operadoras';
 import OperadoraDetalle from './pages/OperadoraDetalle';
 import Estadisticas from './pages/Estadisticas';
+import AdminIndex from './pages/admin/AdminIndex';
 
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -86,12 +87,7 @@ export default function App() {
       );
     }
     if (active === 'admin') {
-      return (
-        <>
-          <h2>Administración</h2>
-          <p>Contenido de Administración.</p>
-        </>
-      );
+      return <AdminIndex />;
     }
 
     return (

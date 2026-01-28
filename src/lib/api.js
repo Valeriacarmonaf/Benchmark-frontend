@@ -98,3 +98,111 @@ export async function fetchStatsParticipacionPaises() {
   }
   return r.json();
 }
+
+// Admin actions for operadoras (create / update / delete)
+export async function createOperadora(payload) {
+  const res = await fetch(`${BASE}/operadoras`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error creando operadora (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+export async function updateOperadora(id, payload) {
+  const res = await fetch(`${BASE}/operadoras/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error actualizando operadora (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+export async function deleteOperadora(id) {
+  const res = await fetch(`${BASE}/operadoras/${id}`, { method: 'DELETE' });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error eliminando operadora (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+// Proveedores CRUD
+export async function createProveedor(payload) {
+  const res = await fetch(`${BASE}/proveedores`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error creando proveedor (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+export async function updateProveedor(id, payload) {
+  const res = await fetch(`${BASE}/proveedores/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error actualizando proveedor (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+export async function deleteProveedor(id) {
+  const res = await fetch(`${BASE}/proveedores/${id}`, { method: 'DELETE' });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error eliminando proveedor (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+// Productos CRUD
+export async function createProducto(payload) {
+  const res = await fetch(`${BASE}/products`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error creando producto (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+export async function updateProducto(id, payload) {
+  const res = await fetch(`${BASE}/products/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error actualizando producto (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+export async function deleteProducto(id) {
+  const res = await fetch(`${BASE}/products/${id}`, { method: 'DELETE' });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error eliminando producto (status ${res.status}): ${text}`);
+  }
+  return res.json();
+}
