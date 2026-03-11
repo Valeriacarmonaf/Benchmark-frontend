@@ -8,6 +8,14 @@ export async function fetchOperadoras(q = '') {
   return res.json();
 }
 
+export async function fetchEmpresasMatriz(q = '') {
+  const url = new URL(`${BASE}/operadoras/matrices`);
+  if (q) url.searchParams.set('q', q);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Error al cargar empresas matriz');
+  return res.json();
+}
+
 export async function fetchCategorias() {
   const res = await fetch(`${BASE}/catalogo/categorias`);
   if (!res.ok) throw new Error('Error al cargar categorías');

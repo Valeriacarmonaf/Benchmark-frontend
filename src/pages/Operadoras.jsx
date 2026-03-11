@@ -3,7 +3,7 @@ import { useSearchList } from '../hooks/useSearchList';
 import SearchToolbar from '../components/SearchToolbar';
 import CardGrid from '../components/CardGrid';
 import { useCallback } from 'react';
-
+import { getLogoUrl } from '../lib/storage';
 
 export default function Operadoras({ onOpen }) {  
   const fetcher = useCallback(async ({ q }) => {
@@ -11,8 +11,7 @@ export default function Operadoras({ onOpen }) {
     return { total: list.length, items: list };
   }, []);
 
-  const { q, setQ, items, total, pending, limit, offset, setOffset } =
-    useSearchList(fetcher, { pageSize: 24 });
+  const { q, setQ, items, total, pending } = useSearchList(fetcher, { pageSize: 24 });
 
   return (
     <div className="cx-content-placeholder">
@@ -44,7 +43,8 @@ export default function Operadoras({ onOpen }) {
               {op.foto || op.logo_url || op.url_logo ? (
                 <img
                   className="cx-op-logo"
-                  src={op.foto || op.logo_url || op.url_logo}
+                  //src={op.foto || op.logo_url || op.url_logo}
+                  src={getLogoUrl(op.foto)}
                   alt={op.nombre_empresa || op.nombre}
                 />
               ) : (
@@ -58,22 +58,7 @@ export default function Operadoras({ onOpen }) {
         )}
       />
 
-      {total > limit && (
-        <div className="pager">
-          <button
-            disabled={offset === 0}
-            onClick={() => setOffset(Math.max(0, offset - limit))}
-          >
-            ← Anterior
-          </button>
-          <button
-            disabled={offset + limit >= total}
-            onClick={() => setOffset(offset + limit)}
-          >
-            Siguiente →
-          </button>
-        </div>
-      )}
+
     </div>
   );
 }

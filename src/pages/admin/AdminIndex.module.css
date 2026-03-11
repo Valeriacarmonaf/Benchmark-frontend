@@ -1,0 +1,36 @@
+.adminRoot { padding: 20px; }
+.scrappingLink { display:inline-block; margin-bottom: 12px; padding: 8px 12px; border-radius: 8px; border: 1px solid #97d13a; background: #bfe97a; color: #000; text-decoration: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12); }
+.scrappingLink:hover { filter: brightness(0.98); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16); }
+.nav { margin-bottom: 12px; display:flex; gap:8px; align-items:center; }
+.navButton { padding: 8px 12px; border-radius:8px; border:1px solid #cfcfcf; background:#fff; cursor:pointer }
+.activeBtn { background: #bfe97a; border-color: #97d13a }
+.toolbar { margin: 12px 0; display:flex; gap:12px; align-items:center }
+.search { padding:10px 12px; border-radius:12px; border:1px solid rgba(0,0,0,0.06); width:360px; background: #E1F6C2; box-shadow: inset 0 1px 0 rgba(255,255,255,0.6); }
+.gridWrapper { display:flex; gap: 20px }
+.grid { display:flex; flex-wrap:wrap; gap: 18px; align-items:flex-start }
+.sideForm { width: 420px }
+.plusCard { display:flex; align-items:center; justify-content:center; width:280px; height:140px; border-radius:16px; background:#C5ED7F; font-size:44px; cursor:pointer; border: 2px dashed rgba(0,0,0,0.06); }
+
+.createCard { background: #C5ED7F; border-radius:12px; padding:14px; box-shadow:0 6px 18px rgba(0,0,0,0.08); min-width:220px; max-width:360px }
+
+.plusCard:hover, .createCard:hover { transform: translateY(-3px); }
+
+.operadoraView { display: flex; flex-direction: column; gap: 2px; }
+.operadoraTitle { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.operadoraLine { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.paisView { display: flex; flex-direction: column; gap: 2px; }
+.paisTitle { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.paisLine { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.proveedorView { display: flex; flex-direction: column; gap: 2px; }
+.proveedorTitle { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.proveedorLine { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.productoView { display: flex; flex-direction: column; gap: 2px; }
+.productoTitle { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.productoLine { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.multiSelectList { border: 1px solid #eee; padding: 6px; }
+.multiSelectOption { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.multiSelectOption input[type='checkbox'] { width: auto; margin: 0; flex: 0 0 auto; }

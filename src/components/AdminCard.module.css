@@ -1,0 +1,60 @@
+.card {
+  background: #C5ED7F; /* tarjetas color solicitado */
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  min-width: 220px;
+  max-width: 360px;
+  color: #123012;
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+.fixedCard {
+  width: 280px;
+  min-height: 140px;
+  max-height: 140px;
+  overflow: hidden;
+}
+.fixedCard .body {
+  padding-right: 58px;
+}
+.topRight {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display: flex;
+  gap: 6px;
+}
+.iconBtn {
+  background: rgba(0,0,0,0.06);
+  border: none;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+}
+.body {
+  padding-top: 6px;
+}
+.editArea input:not([type="checkbox"]), .editArea textarea, .editArea select {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+.editArea .row {
+  margin-bottom: 8px;
+}
+.editArea .actions {
+  display:flex; gap:8px; justify-content:flex-end;
+}
+
+/* make simple helper classnames available globally for small forms inside cards */
+:global(.row) { margin-bottom: 8px; }
+:global(.actions) { display:flex; gap:8px; justify-content:flex-end; }
+
+/* hover */
+:global(.card):hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.12); }

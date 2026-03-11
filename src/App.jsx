@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Home from './pages/Home';
@@ -20,18 +20,21 @@ import './index.css';
 
 export default function App() {
   const { session, loading, isAdmin, isActive, profile, signOut } = useAuth();
+  const hadSessionRef = useRef(false);
 
   // Estado de navegación interna (tu app actual)
   const [active, setActive] = useState('home');
   const [menuOpen, setMenuOpen] = useState(false);
   const [opId, setOpId] = useState(null);
   const [selectedPaisId, setSelectedPaisId] = useState(null);
+  const [operatorDetailFrom, setOperatorDetailFrom] = useState('home');
 
   // Estado de pantallas auth
   const [authView, setAuthView] = useState('login'); // login | register | forgot | reset
 
-  const openOperadora = (id) => {
+  const openOperadora = (id, from = 'home') => {
     setOpId(id);
+    setOperatorDetailFrom(from);
     setActive('operatorDetail');
   };
 
@@ -43,11 +46,18 @@ export default function App() {
   }, [loading, session]);
 
   useEffect(() => {
-  if (!loading && session) {
-    setAuthView('login'); // resetea pantallas auth
-    setActive('home');    // entra al home al loguear
-  }
-}, [loading, session]);
+    if (loading) return;
+
+    const hasSession = Boolean(session);
+    const justLoggedIn = !hadSessionRef.current && hasSession;
+
+    if (justLoggedIn) {
+      setAuthView('login'); // resetea pantallas auth
+      setActive('home');    // entra al home solo al iniciar sesión
+    }
+
+    hadSessionRef.current = hasSession;
+  }, [loading, session]);
 
   // Si hay sesión pero el usuario está inactivo, lo sacas
   useEffect(() => {
@@ -69,10 +79,10 @@ export default function App() {
 
   const content = useMemo(() => {
     if (active === 'home') {
-      return <Home onOpenOperadora={openOperadora} selectedPaisId={selectedPaisId} />;
+      return <Home onOpenOperadora={(id) => openOperadora(id, 'home')} selectedPaisId={selectedPaisId} />;
     }
     if (active === 'providers') return <ProveedoresPage />;
-    if (active === 'operators') return <Operadoras onOpen={openOperadora} />;
+    if (active === 'operators') return <Operadoras onOpen={(id) => openOperadora(id, 'operators')} />;
     if (active === 'products') return <Productos />;
     if (active === 'stats') return <Estadisticas />;
     if (active === 'operatorDetail') {
@@ -80,6 +90,11 @@ export default function App() {
         <OperadoraDetalle
           id={opId}
           onBack={(paisId) => {
+            if (operatorDetailFrom === 'operators') {
+              setActive('operators');
+              return;
+            }
+
             setSelectedPaisId(paisId);
             setTimeout(() => setActive('home'), 50);
           }}
@@ -96,7 +111,7 @@ export default function App() {
         <p>Contenido de {active}.</p>
       </>
     );
-  }, [active, opId, selectedPaisId]);
+  }, [active, opId, selectedPaisId, operatorDetailFrom]);
 
   // 1) Cargando sesión
   if (loading) {

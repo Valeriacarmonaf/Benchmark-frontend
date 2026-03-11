@@ -27,7 +27,7 @@ export default function Header({ onToggleMenu }) {
           aria-label="Abrir menú de usuario"
           style={{
             border: 'none',
-            background: 'transparent',
+            background: '#A6D33D',
             padding: 0,
             cursor: 'pointer',
           }}

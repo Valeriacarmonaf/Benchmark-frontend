@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { fetchPaises, fetchHome } from '../lib/api';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 
+
 const GREEN = '#A6D33D';
 const PALETTE = ['#A6D33D', '#89C13C', '#6FB03A', '#559E38', '#3C8C36', '#227A34'];
 
@@ -197,7 +198,13 @@ function Row({ label, value }) {
   );
 }
 
-const formatNumber = (n) => (n != null ? n.toLocaleString() : '—');
+const formatNumber = (n) => {
+  if (n === null || n === undefined || n === '') return '—';
+  const normalized = typeof n === 'string' ? n.replace(/[.,\s]/g, '') : n;
+  const num = Number(normalized);
+  if (!Number.isFinite(num)) return '—';
+  return new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 }).format(num);
+};
 
 const cardStyle = {
   background: '#F3F7EA',

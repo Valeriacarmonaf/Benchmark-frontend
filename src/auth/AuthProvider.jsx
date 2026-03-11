@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { AuthContext } from './authContext';
 
+const PROFILE_CACHE_KEY = 'cx_auth_profile_cache_v1';
+
 function withTimeout(promise, ms = 6000) {
   return Promise.race([
     promise,
@@ -18,12 +20,44 @@ export default function AuthProvider({ children }) {
   // profileLoading: true while fetching profile in background
   const [profileLoading, setProfileLoading] = useState(false);
 
+  function readCachedProfile(userId) {
+    try {
+      const raw = localStorage.getItem(PROFILE_CACHE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (parsed?.userId !== userId || !parsed?.profile) return null;
+      return parsed.profile;
+    } catch {
+      return null;
+    }
+  }
+
+  function writeCachedProfile(userId, nextProfile) {
+    try {
+      if (!userId || !nextProfile) return;
+      localStorage.setItem(
+        PROFILE_CACHE_KEY,
+        JSON.stringify({ userId, profile: nextProfile })
+      );
+    } catch {
+      // ignore cache errors
+    }
+  }
+
+  function clearCachedProfile() {
+    try {
+      localStorage.removeItem(PROFILE_CACHE_KEY);
+    } catch {
+      // ignore cache errors
+    }
+  }
+
   async function loadProfileSafe(userId) {
     try {
       const { data, error } = await withTimeout(
         supabase
           .from('user_profiles')
-          .select('email, role, is_active, full_name, avatar_url')
+          .select('id, email, role, is_active, full_name, avatar_url')
           .eq('id', userId)
           .single(),
         6000
@@ -50,13 +84,25 @@ export default function AuthProvider({ children }) {
     // start loading profile in background
     const uid = newSession?.user?.id;
     if (uid) {
+      const cached = readCachedProfile(uid);
+      if (cached) setProfile(cached);
       setProfileLoading(true);
       const p = await loadProfileSafe(uid);
-      setProfile(p);
+      if (p) {
+        setProfile(p);
+        writeCachedProfile(uid, p);
+      } else {
+        setProfile((prev) => {
+          if (prev?.id === uid) return prev;
+          if (cached?.id === uid) return cached;
+          return null;
+        });
+      }
       setProfileLoading(false);
     } else {
       setProfile(null);
       setProfileLoading(false);
+      clearCachedProfile();
     }
   }
 

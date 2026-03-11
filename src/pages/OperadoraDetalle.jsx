@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchCategorias, fetchOperadoraById, fetchOperadoraVas } from '../lib/api';
+import { getLogoUrl } from '../lib/storage';
+
 
 export default function OperadoraDetalle({ id, onBack }) {
   const [op, setOp] = useState(null);
@@ -39,7 +41,8 @@ export default function OperadoraDetalle({ id, onBack }) {
       <button className="cx-linkback" onClick={() => onBack(op?.id_pais)}>← Regresar</button>
       {/* Header de la operadora */}
       <div className="op-header">
-        <div className="op-logoBox">{op?.foto ? <img src={op.foto} alt={op.nombre_empresa} /> : <div className="op-logoPlaceholder" />}</div>
+      
+        <div className="op-logoBox">{op?.foto ? (<img src={getLogoUrl(op.foto)} alt={op.nombre_empresa} />) : (<div className="op-logoPlaceholder" />)}</div>
         <div className="op-meta">
           <p><strong>Nombre:</strong> {op?.nombre_empresa || '—'}</p>
           <p><strong>Empresa matriz:</strong> {op?.empresa_matriz || '—'}</p>

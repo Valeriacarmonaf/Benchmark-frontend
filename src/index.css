@@ -365,7 +365,7 @@ button { font: inherit; }
   justify-content: flex-start;
   gap: 10px;
   min-height: 220px; /* altura uniforme */
-  background: #F4F6F0; /* fondo claro tipo card */
+  background: #fff;
 }
 
 .cx-op-logoWrap {

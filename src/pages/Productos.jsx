@@ -68,7 +68,7 @@ export default function Productos() {
 
       <div className="results-info">{loading ? 'Cargando…' : `${total} resultado(s)`}</div>
 
-      <div className="cx-grid" style={{ maxHeight: 'calc(100vh - 220px)' }}>
+      <div className="cx-grid" style={{ overflow: 'visible', paddingRight: 0 }}>
         {items.map(p => (
           <article className="cx-card" key={p.id_producto}>
             <h4 className="cx-card-title">{p.nombre_producto}</h4>
